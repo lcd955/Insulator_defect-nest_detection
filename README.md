@@ -1,5 +1,5 @@
 # Insulator_defect-nest_detection
-基于YOLOv5网络的输配电线路故障检测模型研究
+基于YOLOv5网络的输配电线路故障检测模型研究，本项目基于yolov5构建而成
 ## 1、对于绝缘子缺陷检测
 
 ## 2、对线路网鸟巢检测
