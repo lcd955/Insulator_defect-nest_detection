@@ -1,15 +1,21 @@
 import os
 import shutil
 import numpy as np
+import re
+import random
+
+#设置随机种子，保证每次分割的数据集是确定的
+random.seed(0)
+np.random.seed(0)
+os.environ['PYTHONHASHSEED'] = '0'
 
 # 原始数据集的文件夹路径
-img_dir =r'D:\desk\yolov5\insulator_defect\InsulatorDataSet-master\Defective_Insulators\images'    #"./data/images"
-label_dir =r'D:\desk\yolov5\insulator_defect\InsulatorDataSet-master\Defective_Insulators\worktxt'       #"./data/labels"
-
+img_dir ="/root/autodl-tmp/merged_insulator_data_new/img"    #"./data/images"
+label_dir ='/root/autodl-tmp/merged_insulator_data_new/labels'       #"./data/labels"
 
 
 # 目标文件夹路径
-dataset_dir =r"D:\desk\yolov5\datasets"   #"./dataset"
+dataset_dir ="/root/autodl-tmp/datasets_0512"   #"./dataset"
 img_train_dir = os.path.join(dataset_dir, "images/train")
 img_val_dir = os.path.join(dataset_dir, "images/val")
 label_train_dir = os.path.join(dataset_dir, "labels/train")
@@ -34,12 +40,11 @@ split_idx = int(len(img_files) * 0.7)
 train_files = img_files[:split_idx]
 val_files = img_files[split_idx:]
 
-# 复制训练集文件到相应文件夹
+#匹配模块，确保数据集里如果有.jpg,.JPG,JPEG,jpeg也能有良好的表现
 for f in train_files:
     shutil.copy(os.path.join(img_dir, f), os.path.join(img_train_dir, f))
-    shutil.copy(os.path.join(label_dir, f.replace('.jpg','.txt')), os.path.join(label_train_dir, f.replace('.jpg', '.txt')))
+    shutil.copy(os.path.join(label_dir, re.sub(r'.[jJ][pP][gG]|.[jJ][pP][eE][gG]$', '.txt', f)), os.path.join(label_train_dir, re.sub(r'.[jJ][pP][gG]|.[jJ][pP][eE][gG]$', '.txt', f)))
 
-# 复制验证集文件到相应文件夹
 for f in val_files:
     shutil.copy(os.path.join(img_dir, f), os.path.join(img_val_dir, f))
-    shutil.copy(os.path.join(label_dir, f.replace('.jpg','.txt')), os.path.join(label_val_dir, f.replace('.jpg', '.txt')))
+    shutil.copy(os.path.join(label_dir, re.sub(r'.[jJ][pP][gG]|.[jJ][pP][eE][gG]$', '.txt', f)), os.path.join(label_val_dir, re.sub(r'.[jJ][pP][gG]|.[jJ][pP][eE][gG]$', '.txt', f)))
